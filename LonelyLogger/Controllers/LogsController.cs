@@ -1,19 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using LonelyLogger.Models;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace LonelyLogger.Controllers
 {
     [Route("api/[controller]")]
     public class LogsController : Controller
     {
+        private static List<JObject> Logs = new List<JObject>();
+
         // GET api/logs
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<object> Get()
         {
-            return new string[] { "value1", "value2" };
+            return Logs;
         }
 
         // GET api/logs/5
@@ -25,8 +33,9 @@ namespace LonelyLogger.Controllers
 
         // POST api/logs
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody] JObject newLog)
         {
+            Logs.Add(newLog);
         }
 
         // PUT api/logs/5
