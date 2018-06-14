@@ -3,13 +3,22 @@
 xmlhttp.onreadystatechange = function () {
     if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
         if (xmlhttp.status == 200) {
-            var myDiv = document.getElementById("myDiv");
+            var myDiv = document.getElementById("logTable");
 
             var result = JSON.parse(xmlhttp.responseText);
             result.forEach(function (value) {
-                var newParagraph = document.createElement("p");
-                newParagraph.innerText = value.message;
-                myDiv.appendChild(newParagraph);
+                var newRow = document.createElement("tr");
+                var dateCell = document.createElement("td");
+                var messageCell = document.createElement("td");
+
+                var date = new Date(value.log_time);
+                dateCell.innerText = date.toLocaleString();
+                messageCell.innerText = value.message;
+
+                newRow.appendChild(dateCell);
+                newRow.appendChild(messageCell);
+
+                myDiv.appendChild(newRow);
             });
         }
         else if (xmlhttp.status == 400) {

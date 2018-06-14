@@ -35,6 +35,7 @@ namespace LonelyLogger.Controllers
         [HttpPost]
         public void Post([FromBody] JObject newLog)
         {
+            newLog["log_time"] = DateTime.Now;
             Logs.Add(newLog);
         }
 
