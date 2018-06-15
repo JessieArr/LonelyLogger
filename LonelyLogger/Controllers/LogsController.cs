@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LonelyLogger.Models;
+using LonelyLogger.Services;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -15,7 +16,17 @@ namespace LonelyLogger.Controllers
     [Route("api/[controller]")]
     public class LogsController : Controller
     {
-        private static List<JObject> Logs = new List<JObject>();
+        private static IList<JObject> _Logs;
+        private static IList<JObject> Logs {
+            get {
+                if(_Logs == null)
+                {
+                    var fileService = new LogFileService();
+                    _Logs = fileService.LoadCurrentLogFile();
+                }
+                return _Logs;
+            }
+        }
 
         // GET api/logs
         [HttpGet]
@@ -36,7 +47,10 @@ namespace LonelyLogger.Controllers
         public void Post([FromBody] JObject newLog)
         {
             newLog["log_time"] = DateTime.Now;
-            Logs.Add(newLog);
+            Logs.Insert(0, newLog);
+
+            var fileService = new LogFileService();
+            fileService.SaveLogsToFile(Logs);
         }
 
         // PUT api/logs/5

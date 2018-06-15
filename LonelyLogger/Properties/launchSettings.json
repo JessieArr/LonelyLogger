@@ -10,6 +10,7 @@
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
+      "workingDirectory": "\\bin\\Debug\\netcoreapp2.0",
       "launchBrowser": true,
       "launchUrl": "web/index.html",
       "environmentVariables": {
