@@ -219,3 +219,5 @@ _Pvt_Extensions
 *.js
 
 *.map
+
+LonelyLogger/logs/
