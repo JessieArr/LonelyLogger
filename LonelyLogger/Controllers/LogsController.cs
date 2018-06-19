@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LonelyLogger.Constants;
 using LonelyLogger.Models;
 using LonelyLogger.Services;
 using Microsoft.AspNetCore.Http.Internal;
@@ -21,7 +22,7 @@ namespace LonelyLogger.Controllers
             get {
                 if(_Logs == null)
                 {
-                    var fileService = new LogFileService();
+                    var fileService = new LogFileService(new DailyLogRoller());
                     _Logs = fileService.LoadCurrentLogFile();
                 }
                 return _Logs;
@@ -46,10 +47,10 @@ namespace LonelyLogger.Controllers
         [HttpPost]
         public void Post([FromBody] JObject newLog)
         {
-            newLog["log_time"] = DateTime.Now;
+            newLog[LogFields.LogTime] = DateTime.Now;
             Logs.Insert(0, newLog);
 
-            var fileService = new LogFileService();
+            var fileService = new LogFileService(new DailyLogRoller());
             fileService.SaveLogsToFile(Logs);
         }
 

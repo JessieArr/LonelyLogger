@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LonelyLogger.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -10,20 +11,29 @@ namespace LonelyLogger.Services
 {
     public class LogFileService
     {
-        private readonly string _LogFileDirectory = "logs";
         private readonly string _LogFilePrefix = "logfile";
+        private readonly string _LogFileDirectory = "logs";
+        private readonly ILogRoller _LogRoller;
+
+        public LogFileService(ILogRoller logRoller)
+        {
+            _LogRoller = logRoller;
+        }
 
         public void SaveLogsToFile(IList<JObject> logs)
         {
             var currentDirectory = Directory.GetCurrentDirectory();
             // Make sure the logs folder exists.
-            Directory.CreateDirectory(Path.Combine(currentDirectory, _LogFileDirectory));
+            var logFileDirectory = Path.Combine(currentDirectory, _LogFileDirectory);
+            Directory.CreateDirectory(logFileDirectory);
 
-            var formattedDate = DateTime.Now.ToString("MM-dd-yy");
-            var logFilePath = Path.Combine(currentDirectory, _LogFileDirectory);
-            var logFileName = logFilePath + Path.DirectorySeparatorChar + _LogFilePrefix + formattedDate + ".json";
-            var logsAsText = JsonConvert.SerializeObject(logs);
-            File.WriteAllText(logFileName, logsAsText);
+            var logFiles = _LogRoller.GetLogFilesForLogs(logs);
+
+            foreach(var logToWrite in logFiles)
+            {
+                var logsAsText = JsonConvert.SerializeObject(logToWrite.Logs);
+                File.WriteAllText(logFileDirectory + Path.DirectorySeparatorChar + logToWrite.FileName, logsAsText);
+            }
         }
 
         public IList<JObject> LoadCurrentLogFile()
