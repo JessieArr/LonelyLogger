@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\web\script\index.ts" />
+    <Content Remove="wwwroot\web\script\lonelylogger.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +27,7 @@
     <TypeScriptCompile Include="wwwroot\web\script\index.ts">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\web\script\lonelylogger.ts" />
   </ItemGroup>
 
   <ItemGroup>

@@ -44,7 +44,7 @@ namespace LonelyLogger.Services
 
             var formattedDate = DateTime.Now.ToString("MM-dd-yy");
             var logFilePath = Path.Combine(currentDirectory, _LogFileDirectory);
-            var logFileName = logFilePath + Path.DirectorySeparatorChar + _LogFilePrefix + formattedDate + ".json";
+            var logFileName = logFilePath + Path.DirectorySeparatorChar + _LogFilePrefix + "-" + formattedDate + ".json";
 
             if (!File.Exists(logFileName))
             {

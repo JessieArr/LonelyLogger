@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Post Log</title>
+    <script src="script/lonelylogger.js"></script>
+    <script type="text/javascript">
+        function writeLogClicked() {
+            var logMessageElement = document.getElementById("logMessage");
+            var logMessage = logMessageElement.value;
+            if (!logMessage) {
+                return;
+            }
+            var hostname = location.hostname + (location.port ? ':' + location.port : '');
+            var logger = new lonelyLogger(hostname);
+            logger.writeLog({ message: logMessage });
+            logMessageElement.value = "";
+        }
+        
+    </script>
+</head>
+<body>    
+    <a href="index.html">Home</a>
+    <br />
+    <label>Log message:</label><input id="logMessage" type="text" />
+    <br />
+    <input type="button" value="Submit" onclick="writeLogClicked()" />
+</body>
+</html>
