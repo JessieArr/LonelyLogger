@@ -12,11 +12,11 @@ namespace LonelyLogger.Services
     {
         private readonly string _LogFilePrefix = "logfile";
 
-        public IList<LogFile> GetLogFilesForLogs(IList<JObject> logs)
+        public IList<LogFile> GetLogFilesForLogs(IList<LogWithMetaData> logs)
         {
             var logGroups = logs.GroupBy(x =>
             {
-                var date = x[LogFields.LogTime];
+                var date = x.MetaData.ReceivedTime;
                 var dateObject = DateTime.Parse(date.ToString());
                 return dateObject.Date;
             });

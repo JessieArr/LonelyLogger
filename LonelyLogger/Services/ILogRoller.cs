@@ -9,6 +9,6 @@ namespace LonelyLogger.Services
 {
     public interface ILogRoller
     {
-        IList<LogFile> GetLogFilesForLogs(IList<JObject> logs);
+        IList<LogFile> GetLogFilesForLogs(IList<LogWithMetaData> logs);
     }
 }

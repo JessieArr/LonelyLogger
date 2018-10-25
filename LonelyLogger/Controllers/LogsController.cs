@@ -17,8 +17,8 @@ namespace LonelyLogger.Controllers
     [Route("api/[controller]")]
     public class LogsController : Controller
     {
-        private static IList<JObject> _Logs;
-        private static IList<JObject> Logs {
+        private static IList<LogWithMetaData> _Logs;
+        private static IList<LogWithMetaData> Logs {
             get {
                 if(_Logs == null)
                 {
@@ -47,8 +47,16 @@ namespace LonelyLogger.Controllers
         [HttpPost]
         public void Post([FromBody] JObject newLog)
         {
-            newLog[LogFields.LogTime] = DateTime.Now;
-            Logs.Insert(0, newLog);
+            var logWithMetaData = new LogWithMetaData()
+            {
+                Log = newLog,
+                MetaData = new LogMetaData()
+                {
+                    LogId = Guid.NewGuid(),
+                    ReceivedTime = DateTime.UtcNow
+                }
+            };
+            Logs.Insert(0, logWithMetaData);
 
             var fileService = new LogFileService(new DailyLogRoller());
             fileService.SaveLogsToFile(Logs);

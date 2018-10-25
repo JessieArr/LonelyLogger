@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace LonelyLogger.Models
 {
-    public class LogFile
+    public class LogWithMetaData
     {
-        public string FileName;
-        public IList<LogWithMetaData> Logs;
+        public JObject Log { get; set; }
+        public LogMetaData MetaData { get; set; }
     }
 }

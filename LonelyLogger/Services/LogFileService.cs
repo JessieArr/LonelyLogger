@@ -20,7 +20,7 @@ namespace LonelyLogger.Services
             _LogRoller = logRoller;
         }
 
-        public void SaveLogsToFile(IList<JObject> logs)
+        public void SaveLogsToFile(IList<LogWithMetaData> logs)
         {
             var currentDirectory = Directory.GetCurrentDirectory();
             // Make sure the logs folder exists.
@@ -36,7 +36,7 @@ namespace LonelyLogger.Services
             }
         }
 
-        public IList<JObject> LoadCurrentLogFile()
+        public IList<LogWithMetaData> LoadCurrentLogFile()
         {
             var currentDirectory = Directory.GetCurrentDirectory();
             // Make sure the logs folder exists.
@@ -49,12 +49,12 @@ namespace LonelyLogger.Services
             if (!File.Exists(logFileName))
             {
                 // If we have no logs yet, return an empty list.
-                return new List<JObject>();
+                return new List<LogWithMetaData>();
             }
             else
             {
                 var serializedContents = File.ReadAllText(logFileName);
-                var logs = JsonConvert.DeserializeObject<List<JObject>>(serializedContents);
+                var logs = JsonConvert.DeserializeObject<List<LogWithMetaData>>(serializedContents);
 
                 return logs;
             }            
