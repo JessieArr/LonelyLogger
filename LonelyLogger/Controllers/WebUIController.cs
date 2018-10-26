@@ -14,9 +14,9 @@ namespace LonelyLogger.Controllers
         public LoggerDiskStatus Index()
         {
             var allDrives = DriveInfo.GetDrives();
-            var path = Path.GetPathRoot(Environment.SystemDirectory);
+            var path = Path.GetPathRoot(Environment.CurrentDirectory);
 
-            var currentDriveInfo = allDrives.First(x => String.Equals(x.Name, path, StringComparison.OrdinalIgnoreCase));
+            var currentDriveInfo = allDrives.First(x => String.Equals(x.RootDirectory.FullName, path, StringComparison.OrdinalIgnoreCase));
             var availableSpaceString = BytesToString(currentDriveInfo.TotalFreeSpace);
             var totalSpaceString = BytesToString(currentDriveInfo.TotalSize);
             return new LoggerDiskStatus()
