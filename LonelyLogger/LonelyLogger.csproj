@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="logs\logfile-10-25-18.json" />
     <Content Remove="wwwroot\web\script\index.ts" />
     <Content Remove="wwwroot\web\script\lonelylogger.ts" />
   </ItemGroup>
@@ -21,6 +22,10 @@
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="logs\logfile-10-25-18.json" />
   </ItemGroup>
 
   <ItemGroup>

@@ -221,3 +221,5 @@ _Pvt_Extensions
 *.map
 
 LonelyLogger/logs/
+
+*.zip
