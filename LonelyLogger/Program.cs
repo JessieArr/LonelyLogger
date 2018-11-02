@@ -33,7 +33,7 @@ namespace LonelyLogger
                 Console.WriteLine("Webhost stopped.");
                 return;
             };
-            while (true) { }
+            webHost.WaitForShutdown();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
