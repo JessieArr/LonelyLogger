@@ -33,6 +33,14 @@ namespace LonelyLogger.Controllers
         [HttpGet]
         public IEnumerable<object> Get()
         {
+            if (ServerSettingsService.GetServerSettings().UseApiAuthentication)
+            {
+                if (!User.Identity.IsAuthenticated)
+                {
+                    Response.StatusCode = 401;
+                    return null;
+                }
+            }
             return Logs;
         }
 
@@ -72,6 +80,6 @@ namespace LonelyLogger.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-        }
+        }        
     }
 }

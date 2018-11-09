@@ -1,0 +1,5 @@
+﻿{
+  "AdminUsername": "admin",
+  "AdminPassword": "admin",
+  "UseApiAuthentication": true
+}

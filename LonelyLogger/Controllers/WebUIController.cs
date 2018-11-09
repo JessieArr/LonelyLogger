@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using LonelyLogger.Models;
+using LonelyLogger.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LonelyLogger.Controllers
@@ -35,6 +39,46 @@ namespace LonelyLogger.Controllers
             int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
             double num = Math.Round(bytes / Math.Pow(1024, place), 1);
             return (Math.Sign(byteCount) * num).ToString() + suf[place];
+        }
+
+        [Route("/webui/login")]
+        [HttpPost]
+        public async Task<ActionResult> Login(string username, string password)
+        {
+            var serverSettings = ServerSettingsService.GetServerSettings();
+            if(!String.Equals(username, serverSettings.AdminUsername, StringComparison.OrdinalIgnoreCase)
+                || password != serverSettings.AdminPassword)
+            {
+                return Redirect("~/web/login.html");
+            }
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Role, "Administrator"),
+            };
+
+            var claimsIdentity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60),
+                IsPersistent = true,
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
+            return Redirect("~/web/index.html");
+        }
+
+        [Route("/webui/logout")]
+        [HttpGet]
+        public async Task<ActionResult> Logout(string username, string password)
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return Redirect("~/web/index.html");
         }
     }
 }
