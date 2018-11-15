@@ -45,10 +45,19 @@ namespace LonelyLogger.Controllers
         }
 
         // GET api/logs/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet]
+        [Route("/api/log")]
+        public object Get(Guid id)
         {
-            return "value";
+            if (ServerSettingsService.GetServerSettings().UseApiAuthentication)
+            {
+                if (!User.Identity.IsAuthenticated)
+                {
+                    Response.StatusCode = 401;
+                    return null;
+                }
+            }
+            return Logs.First(x => x.MetaData.LogId == id);
         }
 
         // POST api/logs

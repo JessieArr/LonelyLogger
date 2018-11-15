@@ -26,7 +26,7 @@ namespace LonelyLogger.Services
             {
                 var logFile = new LogFile()
                 {
-                    FileName = _LogFilePrefix + "-" + group.Key.ToString("MM-dd-yy") + ".json",
+                    FileName = _LogFilePrefix + "-" + group.Key.ToString("yyyy-MM-dd") + ".json",
                     Logs = logGroups.SelectMany(x => x).ToList()
                 };
                 logFiles.Add(logFile);

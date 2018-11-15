@@ -42,7 +42,7 @@ namespace LonelyLogger.Services
             // Make sure the logs folder exists.
             Directory.CreateDirectory(Path.Combine(currentDirectory, _LogFileDirectory));
 
-            var formattedDate = DateTime.Now.ToString("MM-dd-yy");
+            var formattedDate = DateTime.Now.ToString("yyyy-MM-dd");
             var logFilePath = Path.Combine(currentDirectory, _LogFileDirectory);
             var logFileName = logFilePath + Path.DirectorySeparatorChar + _LogFilePrefix + "-" + formattedDate + ".json";
 

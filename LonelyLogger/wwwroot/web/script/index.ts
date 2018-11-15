@@ -13,11 +13,16 @@ function getLogs() {
                 var result = JSON.parse(xmlhttp.responseText);
                 result.forEach(function (val) {
                     var newRow = document.createElement("tr");
+                    var anchorElement = document.createElement("a");
                     var dateCell = document.createElement("td");
                     var messageCell = document.createElement("td");
 
+                    anchorElement.href = "./details.html?id=" + val.metaData.logId;
                     var date = new Date(val.metaData.receivedTime);
-                    dateCell.innerText = date.toLocaleString();
+                    anchorElement.innerText = date.toLocaleString();
+
+                    dateCell.appendChild(anchorElement);
+
                     messageCell.innerText = val.log.message;
 
                     newRow.appendChild(dateCell);

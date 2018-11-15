@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LonelyLogger", "LonelyLogger\LonelyLogger.csproj", "{2CD6142B-30E7-40E4-9F7E-296B022AD19B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LonelyLogger", "LonelyLogger\LonelyLogger.csproj", "{2CD6142B-30E7-40E4-9F7E-296B022AD19B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LonelyLogger.Client", "LonelyLogger.Client\LonelyLogger.Client.csproj", "{A4A66188-EC86-4FDC-8303-6E4CD2A771CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LonelyLogger.Tests", "LonelyLogger.Tests\LonelyLogger.Tests.csproj", "{97EA78F2-91AB-4A8A-8B4F-F20BE1DE1AA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{2CD6142B-30E7-40E4-9F7E-296B022AD19B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CD6142B-30E7-40E4-9F7E-296B022AD19B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CD6142B-30E7-40E4-9F7E-296B022AD19B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4A66188-EC86-4FDC-8303-6E4CD2A771CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4A66188-EC86-4FDC-8303-6E4CD2A771CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4A66188-EC86-4FDC-8303-6E4CD2A771CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4A66188-EC86-4FDC-8303-6E4CD2A771CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97EA78F2-91AB-4A8A-8B4F-F20BE1DE1AA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97EA78F2-91AB-4A8A-8B4F-F20BE1DE1AA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97EA78F2-91AB-4A8A-8B4F-F20BE1DE1AA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97EA78F2-91AB-4A8A-8B4F-F20BE1DE1AA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
