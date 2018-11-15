@@ -40,20 +40,19 @@ namespace LonelyLogger.Services
         {
             var currentDirectory = Directory.GetCurrentDirectory();
             // Make sure the logs folder exists.
-            Directory.CreateDirectory(Path.Combine(currentDirectory, _LogFileDirectory));
+            var logDirectory = Directory.CreateDirectory(Path.Combine(currentDirectory, _LogFileDirectory));
 
-            var formattedDate = DateTime.Now.ToString("yyyy-MM-dd");
-            var logFilePath = Path.Combine(currentDirectory, _LogFileDirectory);
-            var logFileName = logFilePath + Path.DirectorySeparatorChar + _LogFilePrefix + "-" + formattedDate + ".json";
+            var logFileName = _LogRoller.GetCurrentLogFileName();
+            var logFilePath = Path.Combine(logDirectory.FullName, logFileName);
 
-            if (!File.Exists(logFileName))
+            if (!File.Exists(logFilePath))
             {
                 // If we have no logs yet, return an empty list.
                 return new List<LogWithMetaData>();
             }
             else
             {
-                var serializedContents = File.ReadAllText(logFileName);
+                var serializedContents = File.ReadAllText(logFilePath);
                 var logs = JsonConvert.DeserializeObject<List<LogWithMetaData>>(serializedContents);
 
                 return logs;

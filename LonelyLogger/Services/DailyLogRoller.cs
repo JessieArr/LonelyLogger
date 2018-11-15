@@ -17,8 +17,7 @@ namespace LonelyLogger.Services
             var logGroups = logs.GroupBy(x =>
             {
                 var date = x.MetaData.ReceivedTime;
-                var dateObject = DateTime.Parse(date.ToString());
-                return dateObject.Date;
+                return date;
             });
 
             var logFiles = new List<LogFile>();
@@ -26,13 +25,23 @@ namespace LonelyLogger.Services
             {
                 var logFile = new LogFile()
                 {
-                    FileName = _LogFilePrefix + "-" + group.Key.ToString("yyyy-MM-dd") + ".json",
+                    FileName = GetLogFileNameFromDate(group.Key),
                     Logs = logGroups.SelectMany(x => x).ToList()
                 };
                 logFiles.Add(logFile);
             }
 
             return logFiles;
+        }
+
+        public string GetCurrentLogFileName()
+        {
+            return GetLogFileNameFromDate(DateTime.UtcNow);
+        }
+
+        private string GetLogFileNameFromDate(DateTime date)
+        {
+            return _LogFilePrefix + "-" + date.ToString("yyyy-MM-dd") + ".json";
         }
     }
 }

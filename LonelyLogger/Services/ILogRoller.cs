@@ -9,6 +9,7 @@ namespace LonelyLogger.Services
 {
     public interface ILogRoller
     {
+        string GetCurrentLogFileName();
         IList<LogFile> GetLogFilesForLogs(IList<LogWithMetaData> logs);
     }
 }

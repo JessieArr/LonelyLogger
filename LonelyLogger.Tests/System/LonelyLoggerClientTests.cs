@@ -16,12 +16,12 @@ namespace LonelyLogger.Tests.System
         [Fact]
         public async Task Test1()
         {
-            await _SUT.PostLogAsync(new TestPayload() { Message = "This is an automated test." });
+            await _SUT.PostLogAsync(new TestPayload() { message = "This is an automated test." });
         }
 
         private class TestPayload
         {
-            public string Message { get; set; }
+            public string message { get; set; }
         }
     }
 }
