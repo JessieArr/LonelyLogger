@@ -14,9 +14,10 @@ namespace LonelyLogger.Tests.System
         }
 
         [Fact]
-        public async Task Test1()
+        public async Task BasicSystemTest()
         {
-            await _SUT.PostLogAsync(new TestPayload() { message = "This is an automated test." });
+            var result = await _SUT.PostLogAsync(new TestPayload() { message = "This is an automated test." });
+            Assert.True(result.Succeeded);
         }
 
         private class TestPayload

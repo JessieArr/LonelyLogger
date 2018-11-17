@@ -15,21 +15,38 @@ namespace LonelyLogger.Client
             _BaseAddress = baseAddress;
         }
 
-        public async Task PostLogAsync(object objectToLog)
+        public async Task<LogResult> PostLogAsync(object objectToLog)
         {
-            var client = new HttpClient();
-            client.BaseAddress = _BaseAddress;
-            client.Timeout = new TimeSpan(0, 0, 30);
-
-            var serializedObject = JsonConvert.SerializeObject(objectToLog);
-            var bodyContent = new StringContent(serializedObject);
-            bodyContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            var response = await client.PostAsync(_PostLogPath, bodyContent);
-            if(response.StatusCode != System.Net.HttpStatusCode.OK)
+            try
             {
-                throw new Exception("LonelyLogger did not recieve a 200 response.");
+                var client = new HttpClient();
+                client.BaseAddress = _BaseAddress;
+                client.Timeout = new TimeSpan(0, 0, 30);
+
+                var serializedObject = JsonConvert.SerializeObject(objectToLog);
+                var bodyContent = new StringContent(serializedObject);
+                bodyContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var response = await client.PostAsync(_PostLogPath, bodyContent);
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    throw new Exception("LonelyLogger did not recieve a 200 response.");
+                }
             }
+            catch (Exception ex)
+            {
+                return new LogResult()
+                {
+                    Succeeded = false,
+                    Exception = ex
+                };
+            }
+            
+
+            return new LogResult()
+            {
+                Succeeded = true
+            };
         }
     }
 }

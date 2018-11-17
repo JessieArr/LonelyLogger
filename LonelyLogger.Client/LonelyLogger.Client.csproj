@@ -1,6 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <PackageId>LonelyLogger.Client</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Shawn Morrison</Authors>
+    <Company>None</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
