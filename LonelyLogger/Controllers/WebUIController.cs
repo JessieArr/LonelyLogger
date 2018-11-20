@@ -15,7 +15,7 @@ namespace LonelyLogger.Controllers
     [Route("webui")]
     public class WebUIController : Controller
     {
-        public LoggerDiskStatus Index()
+        public LoggerServerStatus Index()
         {
             var allDrives = DriveInfo.GetDrives();
             var path = Path.GetPathRoot(Environment.CurrentDirectory);
@@ -23,11 +23,31 @@ namespace LonelyLogger.Controllers
             var currentDriveInfo = allDrives.First(x => String.Equals(x.RootDirectory.FullName, path, StringComparison.OrdinalIgnoreCase));
             var availableSpaceString = BytesToString(currentDriveInfo.TotalFreeSpace);
             var totalSpaceString = BytesToString(currentDriveInfo.TotalSize);
-            return new LoggerDiskStatus()
+            var currentRAMUsage = BytesToString(GC.GetTotalMemory(false));
+            var startupTime = LonelyLoggerLifetimeService.StartupTime;
+            var uptimeInSeconds = DateTime.UtcNow.Subtract(LonelyLoggerLifetimeService.StartupTime).TotalSeconds;
+            var uptimeString = SecondsToString(uptimeInSeconds);
+            return new LoggerServerStatus()
             {
                 AvailableSpace = availableSpaceString,
-                TotalSpace = totalSpaceString
+                TotalSpace = totalSpaceString,
+                CurrentRAMUsage = currentRAMUsage,
+                StartupTime = startupTime,
+                Uptime = uptimeString
             };
+        }
+
+        static String SecondsToString(double byteCount)
+        {
+            var secondsInMinute = 60;
+            var secondsInHour = secondsInMinute * 60;
+            var secondsInDay = secondsInHour * 24;
+            var days = Math.Round(byteCount / secondsInDay, 0);
+            var timeLeftAfterDays = byteCount % secondsInDay;
+            var hours = Math.Round(timeLeftAfterDays / secondsInHour, 0);
+            var timeLeftAfterHours = byteCount % secondsInHour;
+            var minutes = Math.Round(timeLeftAfterHours / secondsInMinute, 0);
+            return $"{days} days, {hours} hours, {minutes} minutes";
         }
 
         static String BytesToString(long byteCount)

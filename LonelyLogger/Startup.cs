@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LonelyLogger.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +18,7 @@ namespace LonelyLogger
     {
         public Startup(IConfiguration configuration)
         {
+            LonelyLoggerLifetimeService.StartupTime = DateTime.UtcNow;
             Configuration = configuration;
         }
 

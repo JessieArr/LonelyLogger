@@ -44,7 +44,7 @@ function getLogs() {
     xmlhttp.send();
 }
 
-function getDiskSpace() {
+function getServerStatus() {
     var xmlhttp = new XMLHttpRequest();
 
     xmlhttp.onreadystatechange = function () {
@@ -52,10 +52,17 @@ function getDiskSpace() {
             if (xmlhttp.status == 200) {
                 var available = document.getElementById("availableSpace");
                 var total = document.getElementById("totalSpace");
+                var startupTime = document.getElementById("startupTime");
+                var uptime = document.getElementById("uptime");
+                var ramUsage = document.getElementById("ramUsage");
                 
                 var result = JSON.parse(xmlhttp.responseText);      
                 available.innerText = result.availableSpace;
                 total.innerText = result.totalSpace;
+                var startupTimeDate = new Date(result.startupTime);
+                startupTime.innerText = startupTimeDate.toLocaleString();
+                uptime.innerText = result.uptime;
+                ramUsage.innerText = result.currentRAMUsage;
             }
             else if (xmlhttp.status == 400) {
                 console.log('There was an error 400');
@@ -71,7 +78,7 @@ function getDiskSpace() {
 }
 
 getLogs();
-getDiskSpace();
+getServerStatus();
 setInterval(function () {
     getLogs();
 }, 5000);
