@@ -1,8 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <PackageId>LonelyLogger.Client</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <Authors>Shawn Morrison</Authors>
+    <PackageDescription>.NET Core client package for the Lonely Logger. This package provides a strongly-typed way of interacting with a Lonely Logger instance.</PackageDescription>
+    <PackageProjectUrl>https://github.com/JessieArr/LonelyLogger/</PackageProjectUrl>
     <Company>None</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     
