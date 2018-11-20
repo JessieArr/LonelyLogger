@@ -10,7 +10,7 @@ namespace LonelyLogger.Tests.System
         private LonelyLoggerClient _SUT;
         public LonelyLoggerClientTests()
         {
-            _SUT = new LonelyLoggerClient(new Uri("http://localhost:51396"));
+            _SUT = new LonelyLoggerClient(new Uri("http://localhost:5050"));
         }
 
         [Fact]
@@ -18,6 +18,14 @@ namespace LonelyLogger.Tests.System
         {
             var result = await _SUT.PostLogAsync(new TestPayload() { message = "This is an automated test." });
             Assert.True(result.Succeeded);
+        }
+
+        [Fact]
+        public async Task QueueingSystemTest()
+        {
+            var firstResult = await _SUT.PostLogAsync(new TestPayload() { message = "This is an automated test." });
+            var secondResult = await _SUT.PostLogAsync(new TestPayload() { message = "This is an automated test." });
+            Assert.True(secondResult.Result == LogResultEnum.Queued);
         }
 
         private class TestPayload

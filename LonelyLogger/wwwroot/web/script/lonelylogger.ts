@@ -6,7 +6,7 @@
         hostname: newHostName,
         writeLog: function (log) {
             var http = new XMLHttpRequest();
-            var url = "http://" + this.hostname + "/api/logs";
+            var url = "http://" + this.hostname + "/api/log";
             http.open("POST", url, true);
 
             http.onreadystatechange = function () {

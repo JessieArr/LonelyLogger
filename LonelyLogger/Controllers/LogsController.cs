@@ -44,7 +44,7 @@ namespace LonelyLogger.Controllers
             return Logs;
         }
 
-        // GET api/logs/5
+        // GET api/log/5
         [HttpGet]
         [Route("/api/log")]
         public object Get(Guid id)
@@ -60,8 +60,9 @@ namespace LonelyLogger.Controllers
             return Logs.First(x => x.MetaData.LogId == id);
         }
 
-        // POST api/logs
+        // POST api/log
         [HttpPost]
+        [Route("/api/log")]
         public void Post([FromBody] JObject newLog)
         {
             var logWithMetaData = new LogWithMetaData()
@@ -74,6 +75,29 @@ namespace LonelyLogger.Controllers
                 }
             };
             Logs.Insert(0, logWithMetaData);
+
+            var fileService = new LogFileService(new DailyLogRoller());
+            fileService.SaveLogsToFile(Logs);
+        }
+
+        // POST api/logs
+        [HttpPost]
+        public void Post([FromBody] IEnumerable<JObject> newLogs)
+        {
+            var receivedTime = DateTime.UtcNow;
+            foreach(var log in newLogs)
+            {
+                var logWithMetaData = new LogWithMetaData()
+                {
+                    Log = log,
+                    MetaData = new LogMetaData()
+                    {
+                        LogId = Guid.NewGuid(),
+                        ReceivedTime = receivedTime
+                    }
+                };
+                Logs.Insert(0, logWithMetaData);
+            }            
 
             var fileService = new LogFileService(new DailyLogRoller());
             fileService.SaveLogsToFile(Logs);
