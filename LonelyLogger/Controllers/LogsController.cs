@@ -17,9 +17,10 @@ namespace LonelyLogger.Controllers
     [Route("api/[controller]")]
     public class LogsController : Controller
     {
-        private static bool _IsSaving;
+        private static volatile bool _IsSaving;
         private static DateTime _LastSaveTime;
         private static IList<LogWithMetaData> _Logs;
+        private static object _Lock = new { };
         private static IList<LogWithMetaData> Logs
         {
             get
@@ -79,19 +80,32 @@ namespace LonelyLogger.Controllers
                 }
             };
             Logs.Insert(0, logWithMetaData);
-
-            if (!_IsSaving)
+            
+            lock (_Lock)
             {
-                _IsSaving = true;
-                var fileService = new LogFileService(new DailyLogRoller());
-                var listToSave = Logs.ToList();
-                fileService.SaveLogsToFile(listToSave);
-                _IsSaving = false;
-            }
-            else
-            {
-                return;
-            }
+                if (!_IsSaving)
+                {
+                    Task.Factory.StartNew(() =>
+                    {
+                        try
+                        {
+                            var fileService = new LogFileService(new DailyLogRoller());
+                            var listToSave = Logs.ToList();
+                            fileService.SaveLogsToFile(listToSave);
+                            _IsSaving = false;
+                        }
+                        catch (Exception)
+                        {
+                            // Don't let the app crash due to failure here.
+                        }
+                    });
+                    _IsSaving = true;
+                }
+                else
+                {
+                    return;
+                }
+            }            
         }
 
         // POST api/logs
