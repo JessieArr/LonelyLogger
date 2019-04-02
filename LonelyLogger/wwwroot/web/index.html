@@ -10,6 +10,8 @@
     <a href="/webui/logout">Log out.</a>
     <p>Disk status: <b id="availableSpace">0KB</b> of <b id="totalSpace">0KB</b> available. Currently using <span id="ramUsage"></span> of RAM.</p>
     <p>Server started: <span id="startupTime">N/A</span> (running for <span id="uptime">N/A</span>)</p>
+    <input id="loadTestButton" type="button" onclick="toggleLoadTest();" value="Start Load Test" />
+    <p id="loadTestStatus">Load Test Not Running</p>
     <h1>Logs:</h1>
     <table>
         <thead>
@@ -20,6 +22,7 @@
         </thead>
         <tbody id="logTableBody"></tbody>
     </table>
+    <script type="text/javascript" src="/web/script/lonelylogger.js"></script>
     <script type="text/javascript" src="/web/script/index.js"></script>
 </body>
 </html>

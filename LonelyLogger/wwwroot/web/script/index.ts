@@ -77,6 +77,28 @@ function getServerStatus() {
     xmlhttp.send();
 }
 
+var loadTestIsRunning = false;
+var loadTestInterval;
+function toggleLoadTest() {
+    var status = document.getElementById('loadTestStatus');
+    loadTestIsRunning = !loadTestIsRunning;
+    if (loadTestIsRunning) {
+        status.innerText = 'Load Test Is Running!';
+        loadTestInterval = setInterval(() => {
+            postLoadTestLog();
+        }, 1000);
+    } else {
+        status.innerText = 'Load Test Not Running.';
+        clearInterval(loadTestInterval);
+    }
+}
+
+function postLoadTestLog() {
+    var host = window.location.host;
+    var logger = lonelyLogger(host);
+    logger.writeLog({ message: "Load test: " + new Date().getTime() });
+}
+
 getLogs();
 getServerStatus();
 setInterval(function () {

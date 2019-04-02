@@ -17,10 +17,15 @@ namespace LonelyLogger.Controllers
     [Route("api/[controller]")]
     public class LogsController : Controller
     {
+        private static volatile bool _IsSaving;
+        private static DateTime _LastSaveTime;
         private static IList<LogWithMetaData> _Logs;
-        private static IList<LogWithMetaData> Logs {
-            get {
-                if(_Logs == null)
+        private static object _Lock = new { };
+        private static IList<LogWithMetaData> Logs
+        {
+            get
+            {
+                if (_Logs == null)
                 {
                     var fileService = new LogFileService(new DailyLogRoller());
                     _Logs = fileService.LoadCurrentLogFile();
@@ -75,9 +80,32 @@ namespace LonelyLogger.Controllers
                 }
             };
             Logs.Insert(0, logWithMetaData);
-
-            var fileService = new LogFileService(new DailyLogRoller());
-            fileService.SaveLogsToFile(Logs);
+            
+            lock (_Lock)
+            {
+                if (!_IsSaving)
+                {
+                    Task.Factory.StartNew(() =>
+                    {
+                        try
+                        {
+                            var fileService = new LogFileService(new DailyLogRoller());
+                            var listToSave = Logs.ToList();
+                            fileService.SaveLogsToFile(listToSave);
+                            _IsSaving = false;
+                        }
+                        catch (Exception)
+                        {
+                            // Don't let the app crash due to failure here.
+                        }
+                    });
+                    _IsSaving = true;
+                }
+                else
+                {
+                    return;
+                }
+            }            
         }
 
         // POST api/logs
@@ -85,7 +113,7 @@ namespace LonelyLogger.Controllers
         public void Post([FromBody] IEnumerable<JObject> newLogs)
         {
             var receivedTime = DateTime.UtcNow;
-            foreach(var log in newLogs)
+            foreach (var log in newLogs)
             {
                 var logWithMetaData = new LogWithMetaData()
                 {
@@ -97,7 +125,7 @@ namespace LonelyLogger.Controllers
                     }
                 };
                 Logs.Insert(0, logWithMetaData);
-            }            
+            }
 
             var fileService = new LogFileService(new DailyLogRoller());
             fileService.SaveLogsToFile(Logs);
@@ -113,6 +141,6 @@ namespace LonelyLogger.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-        }        
+        }
     }
 }
