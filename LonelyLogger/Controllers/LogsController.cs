@@ -17,10 +17,14 @@ namespace LonelyLogger.Controllers
     [Route("api/[controller]")]
     public class LogsController : Controller
     {
+        private static bool _IsSaving;
+        private static DateTime _LastSaveTime;
         private static IList<LogWithMetaData> _Logs;
-        private static IList<LogWithMetaData> Logs {
-            get {
-                if(_Logs == null)
+        private static IList<LogWithMetaData> Logs
+        {
+            get
+            {
+                if (_Logs == null)
                 {
                     var fileService = new LogFileService(new DailyLogRoller());
                     _Logs = fileService.LoadCurrentLogFile();
@@ -76,8 +80,18 @@ namespace LonelyLogger.Controllers
             };
             Logs.Insert(0, logWithMetaData);
 
-            var fileService = new LogFileService(new DailyLogRoller());
-            fileService.SaveLogsToFile(Logs);
+            if (!_IsSaving)
+            {
+                _IsSaving = true;
+                var fileService = new LogFileService(new DailyLogRoller());
+                var listToSave = Logs.ToList();
+                fileService.SaveLogsToFile(listToSave);
+                _IsSaving = false;
+            }
+            else
+            {
+                return;
+            }
         }
 
         // POST api/logs
@@ -85,7 +99,7 @@ namespace LonelyLogger.Controllers
         public void Post([FromBody] IEnumerable<JObject> newLogs)
         {
             var receivedTime = DateTime.UtcNow;
-            foreach(var log in newLogs)
+            foreach (var log in newLogs)
             {
                 var logWithMetaData = new LogWithMetaData()
                 {
@@ -97,7 +111,7 @@ namespace LonelyLogger.Controllers
                     }
                 };
                 Logs.Insert(0, logWithMetaData);
-            }            
+            }
 
             var fileService = new LogFileService(new DailyLogRoller());
             fileService.SaveLogsToFile(Logs);
@@ -113,6 +127,6 @@ namespace LonelyLogger.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-        }        
+        }
     }
 }
