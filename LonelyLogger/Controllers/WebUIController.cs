@@ -37,20 +37,20 @@ namespace LonelyLogger.Controllers
             };
         }
 
-        static String SecondsToString(double byteCount)
+        public static String SecondsToString(double secondCount)
         {
             var secondsInMinute = 60;
             var secondsInHour = secondsInMinute * 60;
             var secondsInDay = secondsInHour * 24;
-            var days = Math.Round(byteCount / secondsInDay, 0);
-            var timeLeftAfterDays = byteCount % secondsInDay;
-            var hours = Math.Round(timeLeftAfterDays / secondsInHour, 0);
-            var timeLeftAfterHours = byteCount % secondsInHour;
-            var minutes = Math.Round(timeLeftAfterHours / secondsInMinute, 0);
+            var days = Math.Floor(secondCount / secondsInDay);
+            var timeLeftAfterDays = secondCount % secondsInDay;
+            var hours = Math.Floor(timeLeftAfterDays / secondsInHour);
+            var timeLeftAfterHours = secondCount % secondsInHour;
+            var minutes = Math.Floor(timeLeftAfterHours / secondsInMinute);
             return $"{days} days, {hours} hours, {minutes} minutes";
         }
 
-        static String BytesToString(long byteCount)
+        public static String BytesToString(long byteCount)
         {
             string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; //Longs run out around EB
             if (byteCount == 0)

@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LonelyLogger.Client\LonelyLogger.Client.csproj" />
+    <ProjectReference Include="..\LonelyLogger\LonelyLogger.csproj" />
   </ItemGroup>
 
 </Project>
